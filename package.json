@@ -1,12 +1,16 @@
 {
   "name": "@lego-fan9/asset-studio-web",
   "type": "module",
+  "version": "0.1.0",
+  "license": "MIT",
   "exports": {
     ".": "./dist/AssetsManager.js"
   },
   "types": "./dist/AssetsManager.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "LICENSE",
+    "README.md"
   ],
   "scripts": {
     "build": "tsup"
