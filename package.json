@@ -3,7 +3,10 @@
   "type": "module",
   "version": "0.2.1",
   "license": "MIT",
-  "repository.url": "https://github.com/Lego-Fan9/asset-studio-web",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Lego-Fan9/asset-studio-web"
+  },
   "exports": {
     ".": "./dist/AssetsManager.js"
   },
