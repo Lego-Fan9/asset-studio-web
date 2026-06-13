@@ -1,0 +1,21 @@
+{
+  "name": "@lego-fan9/asset-studio-web",
+  "type": "module",
+  "exports": {
+    ".": "./dist/AssetsManager.js"
+  },
+  "types": "./dist/AssetsManager.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup"
+  },
+  "devDependencies": {
+    "tsup": "^8.5.1",
+    "typescript": "^6.0.3"
+  },
+  "dependencies": {
+    "@lunapaint/png-codec": "^0.2.0"
+  }
+}

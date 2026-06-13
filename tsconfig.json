@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "es2023",
+    "module": "esnext",
+    "lib": ["ES2023", "DOM"],
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+
+    "declaration": true,
+    "declarationMap": true,
+
+    "rootDir": ".",
+    "outDir": "dist",
+
+    /* Linting */
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": false,
+    "noFallthroughCasesInSwitch": true,
+
+    "ignoreDeprecations": "6.0"
+  },
+  "include": ["src"],
+  "exclude": ["src/Decompression/Lzma"]
+}

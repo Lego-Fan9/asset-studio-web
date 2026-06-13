@@ -1,0 +1,5 @@
+This is derived from https://github.com/Benzinga/lz4js
+
+It has been converted to an ES Module from CommonJS.
+
+Types from https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/lz4js/index.d.ts

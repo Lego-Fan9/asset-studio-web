@@ -1,0 +1,16 @@
+{
+  "name": "cors-proxy",
+  "version": "1.0.0",
+  "description": "allows test instances to ignore CORS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "run": "node index.js"
+  },
+  "author": "Lego-Fan9",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^5.2.1",
+    "request": "^2.88.2"
+  }
+}
