@@ -1,7 +1,7 @@
 {
   "name": "@lego-fan9/asset-studio-web",
   "type": "module",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "MIT",
   "exports": {
     ".": "./dist/AssetsManager.js"
