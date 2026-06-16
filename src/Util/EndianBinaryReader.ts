@@ -15,7 +15,7 @@ export class EndianBinaryReader {
 
     set offset(value: number) {
         if (value < this.baseOffset || value > this.baseOffset + this.length) {
-            console.log(`Out of bounds!`);
+            throw new Error(`Out of bounds!`);
         }
         
         this.internalOffset = value;

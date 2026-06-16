@@ -1,7 +1,7 @@
 import { RequestEnvelope } from "./RequestEnvelope.ts";
 import type { RequestEnvelopePayload } from "./RequestEnvelope.ts";
 
-const ASSET_NAME = "shared_uicontainer";
+const ASSET_NAME = "shared_resourcecontainer";
 
 function main() {
     const loader = new Worker(new URL("./loader.ts", import.meta.url), { type: "module" });

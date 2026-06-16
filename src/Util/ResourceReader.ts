@@ -21,8 +21,8 @@ export class ResourceReader {
         if (objReaderIsRes) {
             this.resReader = reader;
             this.needSearch = false;
-            this.size = reader.view.byteLength;
-            this.offset = 0;
+            this.size = size;
+            this.offset = offset;
         }
     }
 
@@ -44,8 +44,8 @@ export class ResourceReader {
     public GetData(): Uint8Array | null {
         this.GetReader();
 
-        console.log(`Reading data from resS`);
-        console.log(this);
+        //console.log(`Reading data from resS`);
+        //console.log(this);
 
         if (this.resReader === null) {
             return null;

@@ -1,11 +1,13 @@
 import { Texture2D } from "../Classes/Texture2D.js";
 import { TextureFormat } from "../Enums/TextureFormat.js";
 
-import { decodeImage } from "./ImageDecoders/decode.js"; 
+import { decodeImage } from "./ImageDecoders/decode.js";
 
 import { encodePng } from '@lunapaint/png-codec';
 
 export async function ExportTexture2D(m_Texture2D: Texture2D): Promise<string | null> {
+    console.log(`Starting export of ${m_Texture2D.m_Name}`);
+
     if (m_Texture2D.image_data.size === 0 || m_Texture2D.m_Width <= 0 || m_Texture2D.m_Height <= 0) {
         console.error("Tried to decode an image with no image_data, or with no size...");
         return null;
@@ -23,14 +25,16 @@ export async function ExportTexture2D(m_Texture2D: Texture2D): Promise<string | 
     if (m_Texture2D.m_TextureFormat === TextureFormat.DXT1) {
         outputImageSuccess = ExportDXT1(imageBlob, outputImage, m_Texture2D.m_Width, m_Texture2D.m_Height);
     } else if (m_Texture2D.m_TextureFormat === TextureFormat.RGBA32) {
-        outputImage = new Uint8Array(imageBlob);
+        outputImage.set(imageBlob);
         outputImageSuccess = true;
     } else if (m_Texture2D.m_TextureFormat === TextureFormat.DXT5) {
         outputImageSuccess = ExportDXT5(imageBlob, outputImage, m_Texture2D.m_Width, m_Texture2D.m_Height);
     } else if (m_Texture2D.m_TextureFormat === TextureFormat.BC7) {
         outputImageSuccess = ExportBC7(imageBlob, outputImage, m_Texture2D.m_Width, m_Texture2D.m_Height);
+    } else if (m_Texture2D.m_TextureFormat === TextureFormat.RGB24) {
+        outputImageSuccess = ExportRGB24(imageBlob, outputImage, m_Texture2D.m_Width, m_Texture2D.m_Height);
     } else {
-        console.log(`Unknown image format ${m_Texture2D.m_TextureFormat}`);
+        throw new Error(`Unknown image format ${m_Texture2D.m_TextureFormat}`);
     }
 
     if (!outputImageSuccess) {
@@ -95,13 +99,31 @@ function ExportDXT5(input: Uint8Array, outputRef: Uint8Array, width: number, hei
 
 function ExportBC7(input: Uint8Array, outputRef: Uint8Array, width: number, height: number): boolean {
     try {
-        const decoded = decodeImage(input, 'BC7', {offset: 0, length: input.length, shape: {width: width, height: height}});
+        const decoded = decodeImage(input, 'BC7', { offset: 0, length: input.length, shape: { width: width, height: height } });
         outputRef.set(decoded);
     } catch (err) {
         console.error(`Failed to decode img: ${err}`);
 
         return false;
     }
+
+    return true;
+}
+
+function ExportRGB24(input: Uint8Array, outputRef: Uint8Array, width: number, height: number): boolean {
+    const pixelCount = width * height;
+
+    const src = new Uint8Array(input);
+    const rgba = new Uint8Array(pixelCount * 4);
+
+    for (let i = 0, j = 0; i < pixelCount * 3; i += 3, j += 4) {
+        rgba[j] = src[i];
+        rgba[j + 1] = src[i + 1];
+        rgba[j + 2] = src[i + 2];
+        rgba[j + 3] = 255;
+    }
+
+    outputRef.set(rgba);
 
     return true;
 }
@@ -195,7 +217,7 @@ function lerp(v1: number, v2: number, r: number) {
     return v1 * (1 - r) + v2 * r;
 };
 
-function decodeBC3 (imageData: DataView, width: number, height: number, premultiplied: boolean) {
+function decodeBC3(imageData: DataView, width: number, height: number, premultiplied: boolean) {
     var rgba = new Uint8Array(width * height * 4),
         height_4 = (height / 4) | 0,
         width_4 = (width / 4) | 0,
@@ -251,7 +273,7 @@ function decodeBC3 (imageData: DataView, width: number, height: number, premulti
     return rgba;
 };
 
-function interpolateAlphaValues (firstVal: number, secondVal: number) {
+function interpolateAlphaValues(firstVal: number, secondVal: number) {
     var alphaValues = [firstVal, secondVal];
 
     if (firstVal > secondVal) {
@@ -285,11 +307,11 @@ function multiply(component: number, multiplier: number) {
     return Math.round(component * multiplier);
 };
 
-function getAlphaIndex (alphaIndices: number[], pixelIndex: number) {
+function getAlphaIndex(alphaIndices: number[], pixelIndex: number) {
     return extractBitsFromUin16Array(alphaIndices, (3 * (15 - pixelIndex)), 3);
 };
 
-function extractBitsFromUin16Array (array: number[], shift: number, length: number) {
+function extractBitsFromUin16Array(array: number[], shift: number, length: number) {
     // sadly while javascript operates with doubles, it does all its binary operations on 32 bytes integers
     // so we have to get a bit dirty to do the bitshifting on the 48 bytes integer for the alpha values of DXT5
 
